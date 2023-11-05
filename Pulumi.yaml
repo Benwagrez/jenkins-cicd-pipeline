@@ -1,0 +1,6 @@
+name: jenkins-cicd-pipeline
+runtime:
+  name: python
+  options:
+    virtualenv: venv
+description: Jenkins Pipeline in AWS using Pulumi
