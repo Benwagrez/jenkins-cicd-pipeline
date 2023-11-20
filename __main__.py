@@ -2,7 +2,6 @@
 
 import pulumi
 import pulumi_aws as aws
-import pulumi_tls as tls
 from jenkins import init_jenkins
 from network import init_network
 
@@ -11,10 +10,10 @@ region = awsConfig.get("region")
 
 config = pulumi.Config()
 network = config.require_object("networkvars")
-ssh_key = config.require("ssh_key")
+ssh_key = config.get("ssh_key")
 vpc = network["value"]["vpccidr"]
 subnet = network["value"]["subnetcidr"]
-
+print("SSH Key:",ssh_key)
 print("Networking configuration:",vpc, subnet)
 
 network = init_network(vpc, subnet)
