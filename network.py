@@ -60,4 +60,8 @@ def init_network(vpccidr: str, subnetcidr: str) -> pulumi.Output[str]:
           "Owner": "benwagrez@gmail.com",
           "Name": "allow_tls",
       })
-  return vpcsubnet.id
+  output = {
+		"subnet_id": vpcsubnet.id,
+		"security_group": allow_tls.id,
+	}
+  return output

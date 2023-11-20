@@ -11,3 +11,4 @@ config:
     value:
       vpccidr: 10.10.0.0/16
       subnetcidr: 10.10.100.0/24
+  ssh_key: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDFejrjxXKkfLisFmN+T3QwvDT1I1nm9G9mzfZYC7msYV3I8piXq8chpcOcfLCiQ9QJItFThxV54Zfy44yunffMUEzoEKLBsjTe92bRHewHx+wWC7nUsTA1BMVgN3RHJ20OFb9T37bRwpzIxcfOeICW0kVeiB0KKsoXJ7BBmWS6Rc6hbS2nnYoUBVVdLhySlDEuvrKpeo0Sb6/XAmhlwnF1AkPbzTD/3UCadgXBFAiPl6TZCjonDYTodjoj84WusIOwz10tOpWU6Vp3AydtK1Qn3Y32ReDFsF5NTIerP+w10P0FY3Hm/AOZXb7sUHg1LB07WlzbTbZpfgqxRqC8XnDz benwa@waldo"

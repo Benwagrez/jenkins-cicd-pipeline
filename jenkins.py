@@ -1,23 +1,20 @@
 import pulumi
 import pulumi_aws as aws
+import pulumi_tls as tls
 
-def init_jenkins(subnet) -> pulumi.Output[str]:
-  ubuntu = aws.ec2.get_ami(most_recent=True,
-    filters=[
-        aws.ec2.GetAmiFilterArgs(
-            name="name",
-            values=["ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-*"],
-        ),
-        aws.ec2.GetAmiFilterArgs(
-            name="virtualization-type",
-            values=["hvm"],
-        ),
-    ],
-    owners=["099720109477"])
-  user_data = open('ec2config.tpl')
-  user_data_reader = user_data.read()
-  jenkins = aws.ec2.Instance("jenkins",
-      ami=ubuntu.id,
+def init_jenkins(ssh_key,subnet,security_group) -> pulumi.Output[str]:
+	aws_key = aws.ec2.KeyPair(
+		"generated",
+		key_name="JenkinsCICDKey",
+		public_key=ssh_key,
+		opts=pulumi.ResourceOptions(parent=ssh_key),
+    )
+	user_data = open('ec2config.tpl')
+	user_data_reader = user_data.read()
+	ami = aws.ssm.get_parameter(name="/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2")
+	jenkins = aws.ec2.Instance("Jenkins",
+			key_name = aws_key.key_name,
+      ami=ami,
       instance_type="t2.micro",
       tags={
           "Project": pulumi.get_project(),
@@ -27,6 +24,11 @@ def init_jenkins(subnet) -> pulumi.Output[str]:
       },
       user_data=user_data_reader,
       subnet_id=subnet,
+			security_groups=security_group,
       associate_public_ip_address=True
       )
-  return jenkins.public_ip
+	output = {
+		"jenkins_public_ip": jenkins.public_ip,
+		"jenkins_public_dns": jenkins.public_dns
+	}
+	return output
